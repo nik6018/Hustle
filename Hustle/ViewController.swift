@@ -11,30 +11,37 @@ import AVFoundation
 
 class ViewController: UIViewController {
 
-	var player: AVAudioPlayer!
-	@IBOutlet weak var darkBlueImage: UIImageView!
-	@IBOutlet weak var onButton: UIButton!
-	@IBOutlet weak var blueView: UIView! {
+	private var player: AVAudioPlayer!
+	
+	@IBOutlet private weak var darkBlueImage: UIImageView!
+	@IBOutlet private weak var onButton: UIButton!
+	@IBOutlet private weak var blueView: UIView!
+	@IBOutlet private weak var rocketImage: UIImageView!
+	@IBOutlet private weak var cloudImage: UIImageView!
+	@IBOutlet private weak var hustleLabel: UILabel!
+	@IBOutlet private weak var indicatorLabel: UILabel!
+	
+	private var toggleInitialUI: Bool! {
 		didSet {
-			blueView.isHidden = true
+			darkBlueImage.isHidden = toggleInitialUI
+			onButton.isHidden = toggleInitialUI
 		}
 	}
-	@IBOutlet weak var rocketImage: UIImageView! {
+	
+	private var toggleAnimationUI: Bool! {
 		didSet {
-			rocketImage.isHidden = true
+			blueView.isHidden = toggleAnimationUI
+			rocketImage.isHidden = toggleAnimationUI
+			cloudImage.isHidden = toggleAnimationUI
 		}
 	}
-	@IBOutlet weak var cloudImage: UIImageView! {
-		didSet {
-			cloudImage.isHidden = true
-		}
-	}
-	@IBOutlet weak var hustleLabel: UILabel!
-	@IBOutlet weak var indicatorLabel: UILabel!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
+		
+		toggleInitialUI = false
+		toggleAnimationUI = true
 		
 		if let path = Bundle.main.path(forResource: "hustle-on", ofType: "wav") {
 			let audioURL = URL(fileURLWithPath: path)
@@ -48,17 +55,9 @@ class ViewController: UIViewController {
 		}
 	}
 	
-	
-	
-	@IBAction func onButtonPressed(_ sender: Any) {
-		// Hide the Elements
-		darkBlueImage.isHidden = true
-		onButton.isHidden = true
-		
-		//Show the Elements
-		blueView.isHidden = false
-		rocketImage.isHidden = false
-		cloudImage.isHidden = false
+	@IBAction private func onButtonPressed(_ sender: Any) {
+		toggleInitialUI = true
+		toggleAnimationUI = false
 		
 		player.play()
 		
